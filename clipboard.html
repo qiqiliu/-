@@ -9,17 +9,29 @@
             height: 40px;
             font-size: 24px;
         }
+        .text,
+        .img {
+            margin-top: 20px;
+        } 
     </style>
 </head>  
 <body>  
     <h1>clipboard 测试</h1>
     <input type="text" id="input">
-    <button onclick="setText()">写入剪贴板</button>
-    <button onclick="getText()">获取剪贴板内容</button>
-    <button onclick="clearText()">清除剪贴板内容</button>
+    <div class="text">
+        <button onclick="setText()">写入剪贴板</button>
+        <button onclick="getText()">获取剪贴板内容</button>
+        <button onclick="clearText()">清除剪贴板内容</button>
+    </div>
+    <div class="img">
+        <button onclick="setImg()">将图片写入剪贴板</button>
+        <button onclick="getImg()">获取剪贴板图片内容</button>
+    </div>
 
     <script>
         var gui = require('nw.gui');
+        var fs = require('fs');
+        var path = require('path');
  
         // We can not create a clipboard, we have to receive the system clipboard
         var clipboard = gui.Clipboard.get();
@@ -55,6 +67,32 @@
             clipboard.clear();
             document.getElementById("input").value=" ";
             apendText('剪贴板内容已清除');
+        }
+
+        function setImg(){
+            var pngPath = path.resolve('rce.png');
+
+            // read the image from file system as base64 encoded string
+
+            var data = fs.readFileSync(pngPath).toString('base64');
+
+            // transform file path to URL
+            var html = '<img src="file:///' + encodeURI(data.replace(/^\//, '')) + '">';
+
+            var clip = nw.Clipboard.get();
+
+            // write both PNG and HTML to clipboard
+            clip.set([
+              {type: 'png', data: data, raw: true},
+              {type: 'html', data: html}
+            ]);
+        }
+
+        function getImg (){
+            var img = clipboard.get('png');
+            var html = document.createElement("img");
+            html.src = img;
+            document.body.appendChild(html);
         }
   
     </script> 
