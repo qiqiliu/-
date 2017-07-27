@@ -1,0 +1,17 @@
+{
+  "name": "tray",
+  "main": "http://dev.tray.net/clipboard.html",
+  "window": {
+    "width": 1024,
+    "height": 768,
+    "frame": true,
+    "toolbar": false,
+    "show":true,
+    "icon": "rce.png",
+    "show_in_taskbar":true
+  },
+  "webkit": {  
+    "plugin": true,   //是否允许插件  
+    "page-cache":false //是否允许页面缓存  
+  } 
+}

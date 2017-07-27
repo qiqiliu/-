@@ -1,0 +1,58 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>trayDemo</title>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+</head>  
+<body >  
+    <h1>Tray 测试</h1>  
+    <button class="iconFlashing" onclick="iconFlashing()">任务栏闪烁</button>
+<script type="text/javascript">
+    alert("1");
+    var iconFlashing = function(){
+        win.requestAttention(2);  //任务栏闪烁
+    }
+
+    var isShowWindow = true;  
+    // Load native UI library  
+    var gui = require('nw.gui');  
+    var win = gui.Window.get();  
+    var tray = new gui.Tray({  
+        title: '托盘图标',  
+        icon: 'rce.png'  
+    });  
+    tray.tooltip = '点此打开';  
+    //添加一个菜单  
+    var menu = new gui.Menu();  
+    menu.append(new gui.MenuItem({  
+        // type: 'checkbox',  
+        label: '自动更新',
+        click: function(){
+            alert("自动更新");
+        }  
+    }));  
+    menu.append(new gui.MenuItem({  
+        label: '退出',  
+        click: function() {  
+            tray.remove();  
+            tray = null;  
+            win.close();  
+        }  
+    }));  
+    
+    tray.menu = menu;  
+    //click事件  
+    tray.on('click',  
+        function() {  
+            if (isShowWindow) {  
+                win.hide();  
+                isShowWindow = false;  
+            } else {  
+                win.show();  
+                isShowWindow = true;  
+            }  
+        }  
+    );  
+    </script>
+</body>  
+</html>  

@@ -1,0 +1,62 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>clipboardDemo</title>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <style type="text/css">
+        #input {
+            width: 300px;
+            height: 40px;
+            font-size: 24px;
+        }
+    </style>
+</head>  
+<body>  
+    <h1>clipboard 测试</h1>
+    <input type="text" id="input">
+    <button onclick="setText()">写入剪贴板</button>
+    <button onclick="getText()">获取剪贴板内容</button>
+    <button onclick="clearText()">清除剪贴板内容</button>
+
+    <script>
+        var gui = require('nw.gui');
+ 
+        // We can not create a clipboard, we have to receive the system clipboard
+        var clipboard = gui.Clipboard.get();
+
+        function apendText(text) {
+            var element = document.createElement('div');
+            element.appendChild(document.createTextNode(text));
+            document.body.appendChild(element);
+        }
+ 
+        function setText()    //写入剪贴板
+        {
+            // Or write something
+            var clipboardInfo = document.getElementById("input").value;
+            if(clipboardInfo==""){
+                apendText("剪贴板内容不能为空");
+            }else{
+                clipboard.set(clipboardInfo, 'text');
+                apendText(' " ' + clipboardInfo +' " '+' 内容已写入剪贴板');
+            }
+        }
+
+        function getText()   //获取剪贴板内容
+        {
+            // Read from clipboard
+            var text = clipboard.get('text');
+            apendText(text);
+        }
+
+        function clearText()   //清除剪贴板内容
+        {
+            // And clear it!
+            clipboard.clear();
+            document.getElementById("input").value=" ";
+            apendText('剪贴板内容已清除');
+        }
+  
+    </script> 
+</body>  
+</html>  
