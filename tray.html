@@ -7,20 +7,41 @@
 <body >  
     <h1>Tray 测试</h1>  
     <button class="iconFlashing" onclick="iconFlashing()">任务栏闪烁</button>
+    <button class="iconFlashing" onclick="trayFlashing()">托盘闪烁</button>
+    <button class="iconFlashing" id="clearFlashing">清除托盘闪烁</button>
 <script type="text/javascript">
-    alert("1");
+
+    var isShowWindow = true;  
     var iconFlashing = function(){
         win.requestAttention(2);  //任务栏闪烁
     }
+    
+    var changeTray = function(){
+        if(isShowWindow){ 
+            tray.icon ='rce1.png';  
+            isShowWindow = false;
+        }else{
+            tray.icon = 'rce.png';  
+            isShowWindow = true;
+        }
+    }
 
-    var isShowWindow = true;  
+    var trayFlashing =function(){ 
+        var trueShow = window.setInterval(changeTray,"500");
+        document.getElementById("clearFlashing").onclick=function(){
+            window.clearInterval(trueShow);   //清除 tray 闪烁
+            tray.icon = 'rce.png'; 
+        }
+    };   
+   
+ 
     // Load native UI library  
     var gui = require('nw.gui');  
     var win = gui.Window.get();  
     var tray = new gui.Tray({  
         title: '托盘图标',  
         icon: 'rce.png'  
-    });  
+    }); 
     tray.tooltip = '点此打开';  
     //添加一个菜单  
     var menu = new gui.Menu();  
